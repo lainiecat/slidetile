@@ -1,0 +1,114 @@
+package slidetile;
+
+import java.util.ArrayList;
+
+public class SlideGrid {
+	private int[] numPlace;
+	private int[] correctNum;
+	private int moves;
+	
+	public SlideGrid() {
+		//randomly assigns numbers
+		numPlace = new int[9];
+		randomizeGrid();
+		
+		//correct answer to compare to user's grid
+		correctNum = new int[9];
+		for (int i = 0; i < 9; i++) {
+			correctNum[i] = i;
+		}
+		
+		//moves
+		moves = 0;
+	}
+	
+	public void randomizeGrid() {
+		//array list of possible numbers
+		ArrayList<Integer> numbers = new ArrayList<Integer>();
+		for (int i = 0; i < 9; i++) {
+			numbers.add(i);
+		}
+		//randomly add numbers from array list to user grid
+		for (int i = 0; i < 9; i++) {
+			int max = numbers.size();
+			int place = (int)(Math.random() * max);
+			numPlace[i] = numbers.get(place);
+			numbers.remove(place);
+		}
+	}
+	
+	public String playGrid(int num) {
+		int place = 0;
+		int move = 0;
+		
+		//find location of user's number
+		for (int i = 0; i < 9; i++) {
+			if (numPlace[i] == num) {
+				place = i;
+			}
+		}
+		
+		//find location of 0
+		for (int i = 0; i < 9; i++) {
+			if (numPlace[i] == 0) {
+				move = i;
+			}
+		}
+		
+		//checks for legal move
+		if ((place - 1 == move && (move != 2 && move != 5)) || (place + 1 == move && (move != 3 && move != 6)) || place + 3 == move || place - 3 == move) {
+			numPlace[move] = num;
+			numPlace[place] = 0;
+		}
+		
+		moves++;
+		return getGrid();
+	}
+	
+	public String getGrid() {
+		//start the grid
+		String grid = "";
+		grid += " _______ _______ _______";
+		
+		//build rest of grid
+		int count = 3;
+		for (int i = 0; i < 3; i++) {
+			//grid numbers
+			String placeOne = "" + numPlace[count * i];
+			String placeTwo = "" + numPlace[count * i + 1];
+			String placeThree = "" + numPlace[count * i + 2];
+			
+			//replace with a nothing if num is 0
+			if (placeOne.equals("0")) {
+				placeOne = " ";
+			} else if (placeTwo.equals("0")) {
+				placeTwo = " ";
+			} else if (placeThree.equals("0")) {
+				placeThree = " ";
+			}
+			
+			//grid
+			grid += "\n|       |       |       |\n|   " + placeOne + "   |   " + placeTwo + "   |   " + placeThree + "   |\n|_______|_______|_______|";
+		}
+		
+		return grid;
+	}
+	
+	public boolean gameWin() {
+		boolean winning = true;
+		for (int i = 0; i < 9; i++) {
+			if (numPlace[i] != correctNum[i]) {
+				winning = false;
+			}
+		}
+		return winning;
+	}
+	
+	public int getMoves() {
+		return moves;
+	}
+	
+	public int[] getGridNum() {
+		return numPlace;
+	}
+}
