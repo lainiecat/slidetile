@@ -1,0 +1,28 @@
+package slidetile;
+import java.util.Scanner;
+
+public class SlideMain {
+	
+	public static String playGame(SlideGrid grid) {
+		Scanner console = new Scanner(System.in);
+		System.out.println("Pick a number to move.");
+		int moveNum = Integer.parseInt(console.nextLine());
+		return grid.playGrid(moveNum);
+	}
+
+	public static void main(String[] args) {
+		//make new game
+		SlideGrid gameGrid = new SlideGrid();
+		System.out.println(gameGrid.getGrid());
+		
+		boolean win = false;
+		while (!win) {
+			System.out.println(playGame(gameGrid));
+			if (gameGrid.gameWin()) {
+				win = true;
+				System.out.println("You win!");
+			}
+		}
+	}
+
+}
